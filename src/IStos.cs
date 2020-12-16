@@ -37,5 +37,6 @@
 
         //kopiuje i eksportuje stos do tablicy
         T[] ToArray();
+
     }
 }

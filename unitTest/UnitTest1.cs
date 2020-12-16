@@ -79,6 +79,55 @@ namespace UnitTestProjectStos
 
             char c = stos.Peek;
         }
+
+        // TrimExcess() ==> throw StosEmptyException
+        [TestMethod]
+        [ExpectedException(typeof(StosEmptyException))]
+        public void TrimExcessDlaPustegoStosu_StosEmptyException() {
+            var s = new StosWTablicy<int>();
+            s.TrimExcess();
+        }
+
+        // TrimExcess() valid
+        [TestMethod]
+        [DataRow(5)]
+        [DataRow(11)]
+        [DataRow(28)]
+        [DataRow(3)]
+        [DataRow(155)]
+        [DataRow(85)]
+        public void TrimExcessDlaPustegoStosu_Valid(int size) {
+            var s = new StosWTablicy<int>(size);
+            for(int i = 0; i < size; ++i) {
+                s.Push(i);
+            }
+            s.TrimExcess();
+            Assert.AreEqual(size, (int)Math.Floor(s.GetTabLength() * 0.9));
+        }
+
+        // Indexer ==> throw ArgumentOutOfRangeException
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [DataRow(-5)]
+        [DataRow(1)]
+        public void Indexer_ArgumentOutOfRangeException(int ind) {
+            var s = new StosWTablicy<int>();
+            int i = s[ind];            
+        }
+
+        // Indexer ==> valid
+        [TestMethod]
+        [DataRow(new int[] { 0, 5, 55, 7, 1 }, 4, 1)]
+        [DataRow(new int[] { 2521, 67, 1, 245, 26 }, 1, 67)]
+        [DataRow(new int[] { 2, 55, 12, 5, 2 }, 0, 2)]
+        [DataRow(new int[] { 2, 55, 12, 5, 2 }, 2, 12)]
+        public void Indexer_Valid(int[] array, int ind, int value) {
+            var s = new StosWTablicy<int>();
+            foreach(int i in array) {
+                s.Push(i);
+            }
+            Assert.AreEqual(value, s[ind]);
+        }
     }
 
 }
